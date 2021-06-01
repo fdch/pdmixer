@@ -1,0 +1,113 @@
+#N canvas 524 49 639 605 12;
+#X declare -path lib;
+#X text 66 7 PdMixer;
+#X obj 383 16 ingui 1 \$0;
+#X obj 505 16 ingui 2 \$0;
+#X obj 13 208 ingui 3 \$0;
+#X obj 137 208 ingui 4 \$0;
+#X obj 260 208 ingui 5 \$0;
+#X obj 383 208 ingui 6 \$0;
+#X obj 505 208 ingui 7 \$0;
+#X obj 13 400 ingui 8 \$0;
+#X obj 137 400 ingui 9 \$0;
+#X obj 260 400 ingui 10 \$0;
+#X obj 383 400 ingui 11 \$0;
+#X obj 505 400 ingui 12 \$0;
+#N canvas 361 192 888 466 Main 0;
+#X obj 98 367 text define -k \$0-store;
+#A set lvl pan mono ch1 ch2 ich1 ich2 onoff \; 50 5 0 1 2 1 2 1 \;
+50 5 0 1 2 3 4 1 \; 50 5 0 1 2 5 6 1 \; 50 5 0 1 2 7 8 1 \; 50 5 0
+1 2 9 10 1 \; 50 5 0 1 2 11 12 1 \; 50 5 0 1 2 13 14 1 \; 0 5 0 1 2
+15 16 0 \; 0 5 0 1 2 17 18 0 \; 0 5 0 1 2 19 20 0 \; 0 5 0 1 2 21 22
+0 \; 0 5 0 1 2 23 24 0 \;;
+#X obj 530 396 t a b;
+#X obj 530 420 text set \$0-store;
+#X msg 583 392 1e+06;
+#X msg 619 283 clear;
+#X msg 528 305 12;
+#X obj 528 329 until;
+#X obj 204 222 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 581 329 list lvl pan mono ch1 ch2 ich1 ich2 onoff;
+#X obj 619 307 s \$0-store;
+#X text 194 407 recall;
+#X obj 284 408 s \$0-recall;
+#X obj 141 214 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 100 299 savepanel;
+#X msg 100 323 write \$1;
+#X obj 141 234 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 189 296 openpanel;
+#X msg 189 320 read \$1 \, bang;
+#X msg 532 361 list 0 5 0 1 2 1 2 0;
+#X obj 504 266 t b b b b;
+#X obj 137 389 b;
+#X obj 536 198 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 493 79 disconnect;
+#X obj 375 112 r \$0-netsend;
+#X obj 531 167 netsend;
+#X obj 655 196 list prepend \$0;
+#X msg 655 220 \; \$1-input \$2 \$3 \$4;
+#X obj 468 29 sel 0 1;
+#X obj 536 218 print STATUS;
+#X obj 158 144 tgl 30 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 140 193 Presets:;
+#X text 109 213 Save;
+#X text 110 234 Load;
+#X text 164 221 Reset;
+#X text 146 126 Connect;
+#X obj 30 20 declare -path lib;
+#X msg 605 13 read lib/pdmixer-network.txt \, bang;
+#X obj 605 37 text;
+#X obj 605 61 t b p;
+#X msg 605 85 0;
+#X obj 605 109 text get -s text t;
+#X msg 591 134 connect \$1 \$2;
+#X connect 0 0 20 0;
+#X connect 1 0 2 0;
+#X connect 1 1 3 0;
+#X connect 3 0 2 1;
+#X connect 4 0 9 0;
+#X connect 5 0 6 0;
+#X connect 6 0 18 0;
+#X connect 7 0 19 0;
+#X connect 8 0 1 0;
+#X connect 12 0 13 0;
+#X connect 13 0 14 0;
+#X connect 14 0 0 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 0 0;
+#X connect 18 0 1 0;
+#X connect 19 0 11 0;
+#X connect 19 1 5 0;
+#X connect 19 2 8 0;
+#X connect 19 3 4 0;
+#X connect 20 0 11 0;
+#X connect 21 0 28 0;
+#X connect 22 0 24 0;
+#X connect 23 0 24 0;
+#X connect 24 0 21 0;
+#X connect 24 1 25 0;
+#X connect 25 0 26 0;
+#X connect 27 0 22 0;
+#X connect 27 1 36 0;
+#X connect 29 0 27 0;
+#X connect 36 0 37 0;
+#X connect 37 0 38 0;
+#X connect 38 0 39 0;
+#X connect 38 1 40 3;
+#X connect 39 0 40 0;
+#X connect 40 0 41 0;
+#X connect 41 0 24 0;
+#X coords 0 -1 1 1 144 189 1 100 100;
+#X restore 235 16 pd Main Panel;
+#X text 13 33 A 12 stereo channel \, server-based mixer. The audio
+stuff is shamelessly adapted from Netty McNetface's receivers. This
+is the client patch. The server must have lib/pdmixer-server.pd running.
+Network configuration is done on the lib/pdmixer-network.txt file,
+f 30;
+#X text 125 179 fdch.github.io;
