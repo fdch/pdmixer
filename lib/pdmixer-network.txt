@@ -1,1 +1,1 @@
-acd-audio.asc.ohio-state.edu 10499
+localhost 38400
