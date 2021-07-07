@@ -27,14 +27,14 @@ do
             if [[ $w == "send" ]]
             then
                 # echo "SEND" $line
-                jack_disconnect "pdmixer:output$((d-1)) $line"
+                jack_disconnect "pdmixer:output$((d-1))" $line
             elif [[ $w == "receive" ]]
             then
                 # echo "RECEIVE" $line
                 i=$((i-1))
                 i=$((i*2))
                 d=$((d-1))
-                jack_disconnect "$line pdmixer:input$((i+$d))"
+                jack_disconnect $line "pdmixer:input$((i+$d))"
             else
                 continue
             fi
@@ -50,14 +50,14 @@ do
             if [[ $w == "send" ]]
             then
                 # echo "SEND" $line
-                jack_connect "pdmixer:output$((d-1)) $line"
+                jack_connect "pdmixer:output$((d-1))" $line
             elif [[ $w == "receive" ]]
             then
                 # echo "RECEIVE" $line
                 i=$((i-1))
                 i=$((i*2))
                 d=$((d-1))
-                jack_connect "$line pdmixer:input$((i+$d))"
+                jack_connect $line "pdmixer:input$((i+$d))"
             else
                 continue
             fi
