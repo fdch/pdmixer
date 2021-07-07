@@ -15,7 +15,7 @@ do
     jack_lsp > $c_lsp
     wait
     diff $p_lsp $c_lsp > $d_lsp
-    
+
     if grep "<" $d_lsp > /dev/null 2>&1
     then 
         echo "DISCONNECTING" $(date) 
@@ -27,14 +27,14 @@ do
             if [[ $w == "send" ]]
             then
                 # echo "SEND" $line
-                echo "jack_disconnect pdmixer:output$((d-1)) $line"
+                jack_disconnect "pdmixer:output$((d-1)) $line"
             elif [[ $w == "receive" ]]
             then
                 # echo "RECEIVE" $line
                 i=$((i-1))
                 i=$((i*2))
                 d=$((d-1))
-                echo "jack_disconnect $line pdmixer:input$((i+$d))"
+                jack_disconnect "$line pdmixer:input$((i+$d))"
             else
                 continue
             fi
@@ -50,14 +50,14 @@ do
             if [[ $w == "send" ]]
             then
                 # echo "SEND" $line
-                echo "jack_connect pdmixer:output$((d-1)) $line"
+                jack_connect "pdmixer:output$((d-1)) $line"
             elif [[ $w == "receive" ]]
             then
                 # echo "RECEIVE" $line
                 i=$((i-1))
                 i=$((i*2))
                 d=$((d-1))
-                echo "jack_connect $line pdmixer:input$((i+$d))"
+                jack_connect "$line pdmixer:input$((i+$d))"
             else
                 continue
             fi
