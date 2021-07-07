@@ -1,0 +1,57 @@
+#!/bin/bash
+
+jack_wait -w
+
+touch p_lsp
+touch d_lsp
+
+while true
+do
+    jack_lsp > c_lsp
+    wait
+    diff p_lsp c_lsp > d_lsp
+
+    if grep "<" d_lsp > /dev/null 2>&1
+    then 
+        echo "DISCONNECTING" $(date) 
+        while read line
+        do
+            i=$(echo $line | cut -f 1 -d ":" | cut -f 2 -d "_")
+            w=$(echo $line | cut -f 2 -d ":" | cut -f 1 -d "_")
+            d=$(echo $line | cut -f 2 -d ":" | cut -f 2 -d "_")
+            if [[ $w == "send" ]]
+            then
+                # echo "SEND" $line
+                echo "jack_disconnect pdmixer:output$((d-1)) $line"
+            else
+                # echo "RECEIVE" $line
+                i=$((i-1))
+                i=$((i*2))
+                d=$((d-1))
+                echo "jack_disconnect $line pdmixer:input$((i+$d))"
+            fi
+        done < <(grep "<" d_lsp | awk '{print $2}')
+    elif grep ">" d_lsp > /dev/null 2>&1
+    then
+        echo "CONNECTING" $(date) 
+        while read line
+        do
+            i=$(echo $line | cut -f 1 -d ":" | cut -f 2 -d "_")
+            w=$(echo $line | cut -f 2 -d ":" | cut -f 1 -d "_")
+            d=$(echo $line | cut -f 2 -d ":" | cut -f 2 -d "_")
+            if [[ $w == "send" ]]
+            then
+                # echo "SEND" $line
+                echo "jack_connect pdmixer:output$((d-1)) $line"
+            else
+                # echo "RECEIVE" $line
+                i=$((i-1))
+                i=$((i*2))
+                d=$((d-1))
+                echo "jack_connect $line pdmixer:input$((i+$d))"
+            fi
+        done < <(grep ">" d_lsp | awk '{print $2}')
+    fi
+    cat c_lsp > p_lsp
+    sleep 1
+done

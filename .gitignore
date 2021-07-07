@@ -1,1 +1,3 @@
 tests/
+*_lsp
+lib/pdmixer-network.txt
