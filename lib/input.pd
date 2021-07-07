@@ -146,7 +146,7 @@ ch2 onoff, f 23;
 #X obj 933 537 s \$2-netreceive;
 #X obj 934 488 list prepend send \$1;
 #X obj 933 512 list trim;
-#X obj 679 542 metro 500;
+#X obj 679 542 metro 22;
 #X connect 0 0 1 1;
 #X connect 1 0 22 0;
 #X connect 2 0 55 0;
