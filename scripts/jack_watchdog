@@ -1,14 +1,22 @@
 #!/bin/bash
+c_lsp=$1
+p_lsp=$2
+d_lsp=$3
 
 jack_wait -w
 
+
+touch $p_lsp
+touch $d_lsp
+touch $c_lsp
+
 while true
 do
-    jack_lsp > /dev/c_lsp
+    jack_lsp > $c_lsp
     wait
-    diff /dev/p_lsp /dev/c_lsp > /dev/d_lsp
+    diff $p_lsp $c_lsp > $d_lsp
 
-    if grep "<" /dev/d_lsp > /dev/null 2>&1
+    if grep "<" $d_lsp > /dev/null 2>&1
     then 
         echo "DISCONNECTING" $(date) 
         while read line
@@ -27,8 +35,8 @@ do
                 d=$((d-1))
                 echo "jack_disconnect $line pdmixer:input$((i+$d))"
             fi
-        done < <(grep "<" /dev/d_lsp | awk '{print $2}')
-    elif grep ">" /dev/d_lsp > /dev/null 2>&1
+        done < <(grep "<" $d_lsp | awk '{print $2}')
+    elif grep ">" $d_lsp > /dev/null 2>&1
     then
         echo "CONNECTING" $(date) 
         while read line
@@ -47,8 +55,8 @@ do
                 d=$((d-1))
                 echo "jack_connect $line pdmixer:input$((i+$d))"
             fi
-        done < <(grep ">" /dev/d_lsp | awk '{print $2}')
+        done < <(grep ">" $d_lsp | awk '{print $2}')
     fi
-    cat /dev/c_lsp > /dev/p_lsp
+    cat $c_lsp > $p_lsp
     sleep 1
 done
