@@ -4,6 +4,9 @@ A 12 stereo channel, TCP server-based mixer. The audio stuff is shamelessly adap
 
 The code is located in github: [https://github.com/fdch/pdmixer](https://github.com/fdch/pdmixer)
 
+![PdMixer Gui](pdmixer.jpg "Pd Mixer Gui")
+
+
 [pdmixer.pd](pdmixer.pd) is the client patch (aka, the 'gui'), and the audio stuff is on the sever patch: [lib/pdmixer-server.pd](lib/pdmixer-server.pd)
 
 # Server Setup
